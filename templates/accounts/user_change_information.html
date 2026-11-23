@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Minha conta - {{ block.super }}{% endblock title %}
+
+{% block body %}
+  <div class="page-head">
+    <div>
+      <span class="eyebrow">Acesso</span>
+      <h1>Minha conta</h1>
+      <p>Atualize seus dados de identificação.</p>
+    </div>
+  </div>
+  <section class="card card-pad form-card">
+    <form action="" method="POST">
+      {% csrf_token %}
+      <div class="form-grid">
+        <div class="field{% if form.first_name.errors %} has-error{% endif %}">
+          <label for="{{ form.first_name.id_for_label }}">Nome</label>
+          {{ form.first_name }}
+          {{ form.first_name.errors }}
+        </div>
+        <div class="field{% if form.last_name.errors %} has-error{% endif %}">
+          <label for="{{ form.last_name.id_for_label }}">Sobrenome</label>
+          {{ form.last_name }}
+          {{ form.last_name.errors }}
+        </div>
+        <div class="field wide{% if form.email.errors %} has-error{% endif %}">
+          <label for="{{ form.email.id_for_label }}">E-mail</label>
+          {{ form.email }}
+          {{ form.email.errors }}
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Salvar</button>
+        <a class="btn" href="{{ home_url }}">Cancelar</a>
+      </div>
+    </form>
+  </section>
+{% endblock body %}

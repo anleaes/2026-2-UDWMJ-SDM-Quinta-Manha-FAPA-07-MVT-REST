@@ -1,0 +1,41 @@
+{% load static %}<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Entrar - ENIGMA EscapeRoom</title>
+  <link rel="icon" type="image/svg+xml" href="{% static 'img/favicon.svg' %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="{% static 'css/arquivo_com_estilos.css' %}">
+</head>
+<body class="login">
+  <main class="card vault">
+    <img class="vault-logo" src="{% static 'img/logo.svg' %}" alt="" width="84" height="84">
+    <h1>ENIGMA</h1>
+    <p class="tag">Só quem decifra, escapa.</p>
+
+    <form action="" method="POST">
+      {% csrf_token %}
+      {% if erro %}
+        <div class="form-error" role="alert">{{ erro }}</div>
+      {% endif %}
+      <div class="field">
+        <label for="username">Usuário</label>
+        <input type="text" id="username" name="username" placeholder="Seu nome de usuário" required autofocus autocomplete="username">
+      </div>
+      <div class="field">
+        <label for="password">Senha</label>
+        <input type="password" id="password" name="password" placeholder="Sua senha" required autocomplete="current-password">
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">
+        <svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-lock"/></svg> Abrir o cofre
+      </button>
+    </form>
+    <p class="alt">Ainda não tem acesso? <a href="{% url 'accounts:add_user' %}">Criar uma conta</a></p>
+  </main>
+  <script src="{% static 'js/arquivo_com_javascript.js' %}" defer></script>
+</body>
+</html>
