@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Painel - {{ block.super }}{% endblock title %}
+
+{% block body %}
+  <section class="hero">
+    <svg class="keyhole" viewBox="0 0 64 64" aria-hidden="true">
+      <defs><linearGradient id="kg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f3cf7a"/><stop offset="1" stop-color="#b9852b"/></linearGradient></defs>
+      <circle cx="32" cy="32" r="29" fill="none" stroke="url(#kg)" stroke-width="1.5"/>
+      <circle cx="32" cy="26" r="7.5" fill="url(#kg)"/>
+      <path d="M28.5 30.5h7L38 47H26z" fill="url(#kg)"/>
+      <circle cx="32" cy="26" r="2.6" fill="#0d1017"/>
+    </svg>
+    <span class="eyebrow">Painel de controle</span>
+    <h1>Olá, <em>{{ user.get_full_name|default:user.username }}</em>.</h1>
+    <p>Aqui você acompanha salas, horários, reservas e o que está acontecendo agora no ENIGMA. Hoje é {{ hoje|date:"l, d \d\e F" }}.</p>
+    <div class="hero-actions">
+      {% if url_novo_agendamento %}
+        <a class="btn btn-primary" href="{{ url_novo_agendamento }}"><svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-plus"/></svg> Nova reserva</a>
+      {% endif %}
+      {% if url_novo_horario %}
+        <a class="btn" href="{{ url_novo_horario }}"><svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-clock"/></svg> Abrir horário</a>
+      {% endif %}
+    </div>
+  </section>
+
+  {% if cards %}
+  <section class="stats">
+    {% for c in cards %}
+      {% if c.url %}<a class="card stat" href="{{ c.url }}">{% else %}<div class="card stat">{% endif %}
+        <span class="stat-ico"><svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#{{ c.icone }}"/></svg></span>
+        <span>
+          <span class="stat-val">{{ c.valor }}</span>
+          <span class="stat-lbl" style="display:block">{{ c.label }}</span>
+        </span>
+      {% if c.url %}</a>{% else %}</div>{% endif %}
+    {% endfor %}
+  </section>
+  {% endif %}
+
+  <div class="grid-2">
+    {% if proximos is not None %}
+    <section class="card card-pad">
+      <h2 class="card-title"><svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-clock"/></svg> Próximos horários livres</h2>
+      <ul class="list-lines">
+        {% for h in proximos %}
+        <li>
+          <div>
+            <div class="cell-title">{{ h.jogo.nome }}</div>
+            <div class="cell-sub">{{ h.jogo.sala.nome }} &middot; {{ h.data|date:"d/m" }} às {{ h.hora_inicio|time:"H:i" }}</div>
+          </div>
+          <span class="badge" data-s="{{ h.status }}">{{ h.vagas_disponiveis }} vaga{{ h.vagas_disponiveis|pluralize }}</span>
+        </li>
+        {% empty %}
+        <li class="muted">Nenhum horário livre à vista. Abra novos horários!</li>
+        {% endfor %}
+      </ul>
+    </section>
+    {% endif %}
+
+    {% if por_status is not None %}
+    <section class="card card-pad">
+      <h2 class="card-title"><svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-calendar"/></svg> Reservas por situação</h2>
+      {% for s in por_status %}
+      <div class="bar-row">
+        <div class="top"><span>{{ s.label }}</span><b>{{ s.qtd }}</b></div>
+        <div class="bar"><i style="width: {{ s.pct }}%"></i></div>
+      </div>
+      {% endfor %}
+    </section>
+    {% endif %}
+  </div>
+
+  {% if ultimos is not None %}
+  <section class="card">
+    <div class="card-pad" style="padding-bottom:0"><h2 class="card-title"><svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-ticket"/></svg> Últimas reservas</h2></div>
+    <div class="table-wrap">
+      <table class="table">
+        <thead><tr><th>Código</th><th>Cliente</th><th>Jogo</th><th>Quando</th><th>Situação</th><th class="num">Total</th></tr></thead>
+        <tbody>
+          {% for a in ultimos %}
+          <tr>
+            <td class="mono">{{ a.codigo }}</td>
+            <td>{{ a.cliente.nome }}</td>
+            <td>{{ a.horario.jogo.nome }}</td>
+            <td>{{ a.horario.data|date:"d/m/Y" }} {{ a.horario.hora_inicio|time:"H:i" }}</td>
+            <td><span class="badge" data-s="{{ a.status }}">{{ a.get_status_display }}</span></td>
+            <td class="num money">R$ {{ a.valor_total }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="6" class="empty">Nenhuma reserva ainda.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+  {% endif %}
+
+  {% if not cards %}
+  <section class="card card-pad">
+    <p class="muted">Nenhum módulo foi ligado ainda. Conforme cada app for instalado (settings.py e urls.py), os números e o menu aparecem aqui automaticamente.</p>
+  </section>
+  {% endif %}
+{% endblock body %}
