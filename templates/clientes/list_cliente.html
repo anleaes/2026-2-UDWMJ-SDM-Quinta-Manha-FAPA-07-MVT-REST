@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Clientes - {{ block.super }}{% endblock title %}
+
+{% block body %}
+  <div class="page-head">
+    <div>
+      <span class="eyebrow">Pessoas</span>
+      <h1>Clientes</h1>
+      <p>Quem faz as reservas.</p>
+    </div>
+    <a class="btn btn-primary" href="{% url 'clientes:add_cliente' %}">
+      <svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-plus"/></svg> Novo cliente
+    </a>
+  </div>
+
+  <form class="toolbar" method="get" action="">
+    <div class="search">
+      <svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-search"/></svg>
+      <input type="search" name="q" value="{{ busca }}" placeholder="Buscar por nome, CPF, e-mail ou cidade..." aria-label="Buscar">
+    </div>
+    <button class="btn" type="submit">Buscar</button>
+    {% if busca %}
+      <a class="btn btn-ghost" href="{% url 'clientes:list_clientes' %}">Limpar</a>
+    {% endif %}
+  </form>
+
+  <section class="card">
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>CPF</th>
+            <th>Telefone</th>
+            <th>Cidade</th>
+            <th>Cliente desde</th>
+            <th>Situação</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for cliente in clientes %}
+          <tr>
+            <td><div class="cell-title">{{ cliente.nome }}</div><div class="cell-sub">{{ cliente.email|default:"sem e-mail" }}</div></td>
+            <td><span class="mono">{{ cliente.cpf }}</span></td>
+            <td>{{ cliente.telefone|default:"—" }}</td>
+            <td>{{ cliente.cidade }}</td>
+            <td>{{ cliente.data_cadastro|date:"d/m/Y" }}</td>
+            <td>{% if cliente.ativo %}<span class="badge" data-s="sim">Sim</span>{% else %}<span class="badge" data-s="nao">Não</span>{% endif %}</td>
+            <td class="actions">
+              <a class="icon-btn" href="{% url 'clientes:edit_cliente' cliente.id %}" title="Editar"><svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-edit"/></svg></a>
+              <a class="icon-btn danger" href="{% url 'clientes:delete_cliente' cliente.id %}" onclick="return confirmarExclusao()" title="Excluir"><svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-trash"/></svg></a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="7">
+            <div class="empty">
+              <svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-user"/></svg>
+              <p>Nenhum cliente encontrado.</p>
+            </div>
+          </td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% include 'partials/pagination.html' %}
+  </section>
+{% endblock body %}
