@@ -18,7 +18,7 @@ urlpatterns = [
 
     path('clientes/', include('clientes.urls', namespace='clientes')),
 
-    # path('funcionarios/', include('funcionarios.urls', namespace='funcionarios')),
+    path('funcionarios/', include('funcionarios.urls', namespace='funcionarios')),
 
     # path('participantes/', include('participantes.urls', namespace='participantes')),
 
