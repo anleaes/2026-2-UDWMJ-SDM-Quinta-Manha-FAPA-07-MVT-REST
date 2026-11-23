@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Funcionários - {{ block.super }}{% endblock title %}
+
+{% block body %}
+  <div class="page-head">
+    <div>
+      <span class="eyebrow">Pessoas</span>
+      <h1>Funcionários</h1>
+      <p>A equipe que faz a magia acontecer.</p>
+    </div>
+    <a class="btn btn-primary" href="{% url 'funcionarios:add_funcionario' %}">
+      <svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-plus"/></svg> Novo funcionário
+    </a>
+  </div>
+
+  <form class="toolbar" method="get" action="">
+    <div class="search">
+      <svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-search"/></svg>
+      <input type="search" name="q" value="{{ busca }}" placeholder="Buscar por nome, matrícula ou e-mail..." aria-label="Buscar">
+    </div>
+    <button class="btn" type="submit">Buscar</button>
+    {% if busca %}
+      <a class="btn btn-ghost" href="{% url 'funcionarios:list_funcionarios' %}">Limpar</a>
+    {% endif %}
+  </form>
+
+  <section class="card">
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Matrícula</th>
+            <th>Cargo</th>
+            <th>Admissão</th>
+            <th>Salário</th>
+            <th>Situação</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for funcionario in funcionarios %}
+          <tr>
+            <td><div class="cell-title">{{ funcionario.nome }}</div><div class="cell-sub">{{ funcionario.email|default:"sem e-mail" }}</div></td>
+            <td><span class="mono">{{ funcionario.matricula }}</span></td>
+            <td><span class="badge badge-plain">{{ funcionario.get_cargo_display }}</span></td>
+            <td>{{ funcionario.data_admissao|date:"d/m/Y" }}</td>
+            <td><span class="money">R$ {{ funcionario.salario|floatformat:2 }}</span></td>
+            <td>{% if funcionario.ativo %}<span class="badge" data-s="sim">Sim</span>{% else %}<span class="badge" data-s="nao">Não</span>{% endif %}</td>
+            <td class="actions">
+              <a class="icon-btn" href="{% url 'funcionarios:edit_funcionario' funcionario.id %}" title="Editar"><svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-edit"/></svg></a>
+              <a class="icon-btn danger" href="{% url 'funcionarios:delete_funcionario' funcionario.id %}" onclick="return confirmarExclusao()" title="Excluir"><svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-trash"/></svg></a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="7">
+            <div class="empty">
+              <svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-badge"/></svg>
+              <p>Nenhum funcionário encontrado.</p>
+            </div>
+          </td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% include 'partials/pagination.html' %}
+  </section>
+{% endblock body %}
