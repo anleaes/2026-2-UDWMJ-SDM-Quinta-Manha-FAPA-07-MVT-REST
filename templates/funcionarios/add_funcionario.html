@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{% if form.instance.pk %}Editar funcionário{% else %}Novo funcionário{% endif %} - {{ block.super }}{% endblock title %}
+
+{% block body %}
+  <div class="page-head">
+    <div>
+      <span class="eyebrow">Pessoas</span>
+      <h1>{% if form.instance.pk %}Editar funcionário{% else %}Novo funcionário{% endif %}</h1>
+    </div>
+  </div>
+
+  <section class="card card-pad form-card">
+    <form action="" method="POST">
+      {% csrf_token %}
+      {% if form.non_field_errors %}
+        <div class="form-error" role="alert">{{ form.non_field_errors }}</div>
+      {% endif %}
+      <div class="form-grid">
+        <div class="field{% if form.nome.errors %} has-error{% endif %}">
+          <label for="{{ form.nome.id_for_label }}">Nome completo</label>
+          {{ form.nome }}
+          {% if form.nome.help_text %}<span class="help">{{ form.nome.help_text }}</span>{% endif %}
+          {{ form.nome.errors }}
+        </div>
+        <div class="field{% if form.matricula.errors %} has-error{% endif %}">
+          <label for="{{ form.matricula.id_for_label }}">Matrícula</label>
+          {{ form.matricula }}
+          {% if form.matricula.help_text %}<span class="help">{{ form.matricula.help_text }}</span>{% endif %}
+          {{ form.matricula.errors }}
+        </div>
+        <div class="field{% if form.email.errors %} has-error{% endif %}">
+          <label for="{{ form.email.id_for_label }}">E-mail</label>
+          {{ form.email }}
+          {% if form.email.help_text %}<span class="help">{{ form.email.help_text }}</span>{% endif %}
+          {{ form.email.errors }}
+        </div>
+        <div class="field{% if form.telefone.errors %} has-error{% endif %}">
+          <label for="{{ form.telefone.id_for_label }}">Telefone</label>
+          {{ form.telefone }}
+          {% if form.telefone.help_text %}<span class="help">{{ form.telefone.help_text }}</span>{% endif %}
+          {{ form.telefone.errors }}
+        </div>
+        <div class="field{% if form.data_nascimento.errors %} has-error{% endif %}">
+          <label for="{{ form.data_nascimento.id_for_label }}">Data de nascimento</label>
+          {{ form.data_nascimento }}
+          {% if form.data_nascimento.help_text %}<span class="help">{{ form.data_nascimento.help_text }}</span>{% endif %}
+          {{ form.data_nascimento.errors }}
+        </div>
+        <div class="field{% if form.cargo.errors %} has-error{% endif %}">
+          <label for="{{ form.cargo.id_for_label }}">Cargo</label>
+          {{ form.cargo }}
+          {% if form.cargo.help_text %}<span class="help">{{ form.cargo.help_text }}</span>{% endif %}
+          {{ form.cargo.errors }}
+        </div>
+        <div class="field{% if form.data_admissao.errors %} has-error{% endif %}">
+          <label for="{{ form.data_admissao.id_for_label }}">Data de admissão</label>
+          {{ form.data_admissao }}
+          {% if form.data_admissao.help_text %}<span class="help">{{ form.data_admissao.help_text }}</span>{% endif %}
+          {{ form.data_admissao.errors }}
+        </div>
+        <div class="field{% if form.salario.errors %} has-error{% endif %}">
+          <label for="{{ form.salario.id_for_label }}">Salário (R$)</label>
+          {{ form.salario }}
+          {% if form.salario.help_text %}<span class="help">{{ form.salario.help_text }}</span>{% endif %}
+          {{ form.salario.errors }}
+        </div>
+        <div class="field is-check">
+          {{ form.ativo }}
+          <label for="{{ form.ativo.id_for_label }}">Funcionário ativo</label>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Salvar</button>
+        <a class="btn" href="{% url 'funcionarios:list_funcionarios' %}">Cancelar</a>
+      </div>
+    </form>
+  </section>
+{% endblock body %}
