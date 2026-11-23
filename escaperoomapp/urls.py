@@ -12,7 +12,7 @@ urlpatterns = [
 
     path('', include('core.urls', namespace='core')),
 
-    # path('contas/', include('accounts.urls', namespace='accounts')),
+    path('contas/', include('accounts.urls', namespace='accounts')),
 
     # path('pessoas/', include('pessoas.urls', namespace='pessoas')),
 
