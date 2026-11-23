@@ -1,0 +1,5 @@
+django==5.2.8
+python-decouple
+pillow
+django-widget-tweaks
+oracledb==3.3.0
