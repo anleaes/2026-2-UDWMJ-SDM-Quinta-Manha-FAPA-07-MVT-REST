@@ -36,7 +36,7 @@ INSTALLED_APPS = [
     # --- APPS DO PROJETO ---
     # Cada pessoa remove o "#" somente da linha do(s) seu(s) app(s).
 
-    # 'core.apps.CoreConfig',
+    'core.apps.CoreConfig',
 
     # 'accounts.apps.AccountsConfig',
 
