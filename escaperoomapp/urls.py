@@ -10,7 +10,7 @@ urlpatterns = [
     # --- URLS DOS APPS ---
     # Cada pessoa remove o "#" somente da linha do(s) seu(s) app(s).
 
-    # path('', include('core.urls', namespace='core')),
+    path('', include('core.urls', namespace='core')),
 
     # path('contas/', include('accounts.urls', namespace='accounts')),
 
