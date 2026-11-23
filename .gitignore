@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Segredos e configurações locais (NUNCA subir para o GitHub)
+.env
+Wallet*/
+*.zip
+
+# Bancos e arquivos gerados
+*.sqlite3
+/static/
+/media/
+
+# Editor
+.vscode/
+
+# Migrações: os arquivos de migração não sobem, mas o __init__.py sim
+/apps/*/migrations/*
+!/apps/*/migrations/__init__.py
