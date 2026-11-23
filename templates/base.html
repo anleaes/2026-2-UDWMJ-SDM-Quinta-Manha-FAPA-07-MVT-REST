@@ -1,0 +1,101 @@
+{% load static %}<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#090b10">
+    <title>{% block title %}ENIGMA - EscapeRoom{% endblock title %}</title>
+    <link rel="icon" type="image/svg+xml" href="{% static 'img/favicon.svg' %}">
+    {# Otimização: fontes com preconnect + display=swap (texto aparece na hora) #}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@400;500;600&display=swap">
+    <link rel="stylesheet" href="{% static 'css/arquivo_com_estilos.css' %}">
+</head>
+<body class="{% if user.is_authenticated %}with-sidebar{% else %}public{% endif %}">
+
+    {% if user.is_authenticated %}
+    <aside class="sidebar" id="sidebar">
+        <a class="brand" href="{{ home_url }}">
+            <img src="{% static 'img/logo.svg' %}" alt="" width="42" height="42">
+            <span>
+                <span class="brand-name">ENIGMA</span>
+                <span class="brand-sub">EscapeRoom</span>
+            </span>
+        </a>
+
+        <nav class="nav" aria-label="Menu principal">
+            {# O menu é montado em escaperoomapp/context_processors.py: só aparecem os apps já instalados #}
+            {% for grupo in menu_groups %}
+                <p class="nav-title">{{ grupo.titulo }}</p>
+                {% for item in grupo.itens %}
+                    <a class="nav-link{% if item.ativo %} is-active{% endif %}" href="{{ item.url }}">
+                        <svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#{{ item.icone }}"/></svg>
+                        <span>{{ item.nome }}</span>
+                    </a>
+                {% endfor %}
+            {% endfor %}
+        </nav>
+
+        <div class="sidebar-foot">Sistema de gerenciamento &middot; v1.0</div>
+    </aside>
+    {% endif %}
+
+    <div class="main">
+        {% if user.is_authenticated %}
+        <header class="topbar">
+            <button class="icon-btn menu-toggle" id="menu-toggle" type="button" aria-label="Abrir menu">
+                <svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-menu"/></svg>
+            </button>
+            <span class="spacer"></span>
+            <div class="user-chip">
+                <span class="avatar" aria-hidden="true">{{ user.username|slice:":1"|upper }}</span>
+                <span class="who">{{ user.get_full_name|default:user.username }}</span>
+            </div>
+            <div class="topbar-actions">
+                {% if profile_url %}
+                <a class="icon-btn" href="{{ profile_url }}" title="Minha conta">
+                    <svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-user"/></svg>
+                </a>
+                {% endif %}
+                {% if password_url %}
+                <a class="icon-btn" href="{{ password_url }}" title="Trocar senha">
+                    <svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-key"/></svg>
+                </a>
+                {% endif %}
+                {% if logout_url %}
+                <a class="icon-btn danger" href="{{ logout_url }}" title="Sair">
+                    <svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-logout"/></svg>
+                </a>
+                {% endif %}
+            </div>
+        </header>
+        {% endif %}
+
+        {% if messages %}
+        <div class="toasts" aria-live="polite">
+            {% for message in messages %}
+            <div class="toast toast--{{ message.tags }}" role="status">
+                <svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-{% if message.tags == 'success' %}check{% else %}ban{% endif %}"/></svg>
+                <span>{{ message }}</span>
+                <button class="close" type="button" aria-label="Fechar"><svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-close"/></svg></button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <main class="content">
+            {% if not user.is_authenticated %}
+            <a class="public-brand" href="{{ home_url }}">
+                <img src="{% static 'img/logo.svg' %}" alt="" width="44" height="44"> ENIGMA
+            </a>
+            {% endif %}
+            {% block body %}
+            {% endblock body %}
+        </main>
+    </div>
+
+    <script src="{% static 'js/arquivo_com_javascript.js' %}" defer></script>
+</body>
+</html>
