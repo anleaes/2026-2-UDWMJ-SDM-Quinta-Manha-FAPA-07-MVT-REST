@@ -40,7 +40,7 @@ INSTALLED_APPS = [
 
     'accounts.apps.AccountsConfig',
 
-    # 'pessoas.apps.PessoasConfig',
+    'pessoas.apps.PessoasConfig',
 
     # 'clientes.apps.ClientesConfig',
 
