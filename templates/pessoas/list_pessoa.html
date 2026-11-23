@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Pessoas - {{ block.super }}{% endblock title %}
+
+{% block body %}
+  <div class="page-head">
+    <div>
+      <span class="eyebrow">Pessoas</span>
+      <h1>Pessoas</h1>
+      <p>Todas as pessoas do sistema (clientes, funcionários e participantes). Para cadastrar, use o menu de cada tipo.</p>
+    </div>
+  </div>
+
+  <form class="toolbar" method="get" action="">
+    <div class="search">
+      <svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-search"/></svg>
+      <input type="search" name="q" value="{{ busca }}" placeholder="Buscar por nome, e-mail ou telefone..." aria-label="Buscar">
+    </div>
+    <button class="btn" type="submit">Buscar</button>
+    {% if busca %}
+      <a class="btn btn-ghost" href="{% url 'pessoas:list_pessoas' %}">Limpar</a>
+    {% endif %}
+  </form>
+
+  <section class="card">
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Tipo</th>
+            <th>Telefone</th>
+            <th>Nascimento</th>
+            <th>Situação</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for pessoa in pessoas %}
+          <tr>
+            <td><div class="cell-title">{{ pessoa.nome }}</div><div class="cell-sub">{{ pessoa.email|default:"sem e-mail" }}</div></td>
+            <td><span class="badge badge-plain">{{ pessoa.tipo }}</span></td>
+            <td>{{ pessoa.telefone|default:"—" }}</td>
+            <td>{{ pessoa.data_nascimento|date:"d/m/Y"|default:"—" }}</td>
+            <td>{% if pessoa.ativo %}<span class="badge" data-s="sim">Sim</span>{% else %}<span class="badge" data-s="nao">Não</span>{% endif %}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="5">
+            <div class="empty">
+              <svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-people"/></svg>
+              <p>Nenhuma pessoa encontrada.</p>
+            </div>
+          </td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% include 'partials/pagination.html' %}
+  </section>
+{% endblock body %}
