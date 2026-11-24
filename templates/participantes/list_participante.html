@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Participantes - {{ block.super }}{% endblock title %}
+
+{% block body %}
+  <div class="page-head">
+    <div>
+      <span class="eyebrow">Pessoas</span>
+      <h1>Participantes</h1>
+      <p>Quem entra na sala para jogar.</p>
+    </div>
+    <a class="btn btn-primary" href="{% url 'participantes:add_participante' %}">
+      <svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-plus"/></svg> Novo participante
+    </a>
+  </div>
+
+  <form class="toolbar" method="get" action="">
+    <div class="search">
+      <svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-search"/></svg>
+      <input type="search" name="q" value="{{ busca }}" placeholder="Buscar por nome ou documento..." aria-label="Buscar">
+    </div>
+    <button class="btn" type="submit">Buscar</button>
+    {% if busca %}
+      <a class="btn btn-ghost" href="{% url 'participantes:list_participantes' %}">Limpar</a>
+    {% endif %}
+  </form>
+
+  <section class="card">
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Documento</th>
+            <th>Nascimento</th>
+            <th>Menor de idade</th>
+            <th>Termo</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for participante in participantes %}
+          <tr>
+            <td><div class="cell-title">{{ participante.nome }}</div><div class="cell-sub">{{ participante.email|default:"sem e-mail" }}</div></td>
+            <td><span class="mono">{{ participante.documento|default:"—" }}</span></td>
+            <td>{{ participante.data_nascimento|date:"d/m/Y"|default:"—" }}</td>
+            <td>{% if participante.menor_de_idade %}<span class="badge" data-s="pendente">Menor</span>{% else %}<span class="muted">Não</span>{% endif %}</td>
+            <td>{% if participante.termo_responsabilidade %}<a href="{{ participante.termo_responsabilidade.url }}" target="_blank" rel="noopener">Ver termo</a>{% elif participante.menor_de_idade %}<span class="badge" data-s="cancelado">Pendente</span>{% else %}<span class="muted">—</span>{% endif %}</td>
+            <td class="actions">
+              <a class="icon-btn" href="{% url 'participantes:edit_participante' participante.id %}" title="Editar"><svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-edit"/></svg></a>
+              <a class="icon-btn danger" href="{% url 'participantes:delete_participante' participante.id %}" onclick="return confirmarExclusao()" title="Excluir"><svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-trash"/></svg></a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="6">
+            <div class="empty">
+              <svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-ticket"/></svg>
+              <p>Nenhum participante encontrado.</p>
+            </div>
+          </td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% include 'partials/pagination.html' %}
+  </section>
+{% endblock body %}
