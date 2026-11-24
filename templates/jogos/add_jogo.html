@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{% if form.instance.pk %}Editar jogo{% else %}Novo jogo{% endif %} - {{ block.super }}{% endblock title %}
+
+{% block body %}
+  <div class="page-head">
+    <div>
+      <span class="eyebrow">Catálogo</span>
+      <h1>{% if form.instance.pk %}Editar jogo{% else %}Novo jogo{% endif %}</h1>
+    </div>
+  </div>
+
+  <section class="card card-pad form-card">
+    <form action="" method="POST">
+      {% csrf_token %}
+      {% if form.non_field_errors %}
+        <div class="form-error" role="alert">{{ form.non_field_errors }}</div>
+      {% endif %}
+      <div class="form-grid">
+        <div class="field{% if form.nome.errors %} has-error{% endif %}">
+          <label for="{{ form.nome.id_for_label }}">Nome do jogo</label>
+          {{ form.nome }}
+          {% if form.nome.help_text %}<span class="help">{{ form.nome.help_text }}</span>{% endif %}
+          {{ form.nome.errors }}
+        </div>
+        <div class="field{% if form.sala.errors %} has-error{% endif %}">
+          <label for="{{ form.sala.id_for_label }}">Sala</label>
+          {{ form.sala }}
+          {% if form.sala.help_text %}<span class="help">{{ form.sala.help_text }}</span>{% endif %}
+          {{ form.sala.errors }}
+        </div>
+        <div class="field{% if form.tema.errors %} has-error{% endif %}">
+          <label for="{{ form.tema.id_for_label }}">Tema</label>
+          {{ form.tema }}
+          {% if form.tema.help_text %}<span class="help">{{ form.tema.help_text }}</span>{% endif %}
+          {{ form.tema.errors }}
+        </div>
+        <div class="field{% if form.nivel_dificuldade.errors %} has-error{% endif %}">
+          <label for="{{ form.nivel_dificuldade.id_for_label }}">Dificuldade</label>
+          {{ form.nivel_dificuldade }}
+          {% if form.nivel_dificuldade.help_text %}<span class="help">{{ form.nivel_dificuldade.help_text }}</span>{% endif %}
+          {{ form.nivel_dificuldade.errors }}
+        </div>
+        <div class="field{% if form.tempo_limite_minutos.errors %} has-error{% endif %}">
+          <label for="{{ form.tempo_limite_minutos.id_for_label }}">Tempo limite (min)</label>
+          {{ form.tempo_limite_minutos }}
+          {% if form.tempo_limite_minutos.help_text %}<span class="help">{{ form.tempo_limite_minutos.help_text }}</span>{% endif %}
+          {{ form.tempo_limite_minutos.errors }}
+        </div>
+        <div class="field{% if form.pontuacao_maxima.errors %} has-error{% endif %}">
+          <label for="{{ form.pontuacao_maxima.id_for_label }}">Pontuação máxima</label>
+          {{ form.pontuacao_maxima }}
+          {% if form.pontuacao_maxima.help_text %}<span class="help">{{ form.pontuacao_maxima.help_text }}</span>{% endif %}
+          {{ form.pontuacao_maxima.errors }}
+        </div>
+        <div class="field{% if form.valor_adicional.errors %} has-error{% endif %}">
+          <label for="{{ form.valor_adicional.id_for_label }}">Adicional por pessoa (R$)</label>
+          {{ form.valor_adicional }}
+          {% if form.valor_adicional.help_text %}<span class="help">{{ form.valor_adicional.help_text }}</span>{% endif %}
+          {{ form.valor_adicional.errors }}
+        </div>
+        <div class="field is-check">
+          {{ form.ativo }}
+          <label for="{{ form.ativo.id_for_label }}">Jogo ativo</label>
+        </div>
+        <div class="field wide{% if form.historia.errors %} has-error{% endif %}">
+          <label for="{{ form.historia.id_for_label }}">História</label>
+          {{ form.historia }}
+          {% if form.historia.help_text %}<span class="help">{{ form.historia.help_text }}</span>{% endif %}
+          {{ form.historia.errors }}
+        </div>
+        <div class="field wide{% if form.instrucoes.errors %} has-error{% endif %}">
+          <label for="{{ form.instrucoes.id_for_label }}">Instruções</label>
+          {{ form.instrucoes }}
+          {% if form.instrucoes.help_text %}<span class="help">{{ form.instrucoes.help_text }}</span>{% endif %}
+          {{ form.instrucoes.errors }}
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Salvar</button>
+        <a class="btn" href="{% url 'jogos:list_jogos' %}">Cancelar</a>
+      </div>
+    </form>
+  </section>
+{% endblock body %}
