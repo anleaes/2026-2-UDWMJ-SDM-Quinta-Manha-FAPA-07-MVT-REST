@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Agendamentos - {{ block.super }}{% endblock title %}
+
+{% block body %}
+  <div class="page-head">
+    <div>
+      <span class="eyebrow">Operação</span>
+      <h1>Agendamentos</h1>
+      <p>As reservas dos clientes. O valor e as vagas são calculados pelo sistema.</p>
+    </div>
+    <a class="btn btn-primary" href="{% url 'agendamentos:add_agendamento' %}">
+      <svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-plus"/></svg> Novo agendamento
+    </a>
+  </div>
+
+  <form class="toolbar" method="get" action="">
+    <div class="search">
+      <svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-search"/></svg>
+      <input type="search" name="q" value="{{ busca }}" placeholder="Buscar por código, cliente ou jogo..." aria-label="Buscar">
+    </div>
+    <select name="status" data-autosubmit aria-label="Filtrar por situação">
+      <option value="">Todas as situações</option>
+      {% for valor, nome in status_choices %}
+        <option value="{{ valor }}"{% if valor == status %} selected{% endif %}>{{ nome }}</option>
+      {% endfor %}
+    </select>
+    <button class="btn" type="submit">Buscar</button>
+    {% if busca or status %}
+      <a class="btn btn-ghost" href="{% url 'agendamentos:list_agendamentos' %}">Limpar</a>
+    {% endif %}
+  </form>
+
+  <section class="card">
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Reserva</th>
+            <th>Jogo</th>
+            <th>Pessoas</th>
+            <th>Total</th>
+            <th>Situação</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for agendamento in agendamentos %}
+          <tr>
+            <td><div class="cell-title"><span class="mono">{{ agendamento.codigo }}</span></div><div class="cell-sub">{{ agendamento.cliente.nome }}</div></td>
+            <td><div class="cell-title">{{ agendamento.horario.jogo.nome }}</div><div class="cell-sub">{{ agendamento.horario.data|date:"d/m/Y" }} às {{ agendamento.horario.hora_inicio|time:"H:i" }}</div></td>
+            <td>{{ agendamento.quantidade_pessoas }}</td>
+            <td><span class="money">R$ {{ agendamento.valor_total }}</span>{% if agendamento.saldo > 0 and agendamento.status != "cancelado" %}<div class="cell-sub">falta R$ {{ agendamento.saldo }}</div>{% endif %}</td>
+            <td><span class="badge" data-s="{{ agendamento.status }}">{{ agendamento.get_status_display }}</span></td>
+            <td class="actions">
+              {% if 'pagamentos' in apps_ativos and agendamento.status != 'cancelado' and agendamento.saldo > 0 %}<a class="icon-btn ok" href="/pagamentos/adicionar/?agendamento={{ agendamento.id }}" title="Registrar pagamento"><svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-card"/></svg></a>{% endif %}{% if 'sessoes' in apps_ativos and agendamento.status == 'confirmado' %}<a class="icon-btn ok" href="/sessoes/adicionar/?agendamento={{ agendamento.id }}" title="Criar sessão"><svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-play"/></svg></a>{% endif %}{% if agendamento.status == 'pendente' or agendamento.status == 'confirmado' %}<a class="icon-btn danger" href="{% url 'agendamentos:cancel_agendamento' agendamento.id %}" title="Cancelar reserva" onclick="return confirm('Cancelar esta reserva? As vagas voltam para o horário.')"><svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-ban"/></svg></a>{% endif %}
+              <a class="icon-btn" href="{% url 'agendamentos:edit_agendamento' agendamento.id %}" title="Editar"><svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-edit"/></svg></a>
+              <a class="icon-btn danger" href="{% url 'agendamentos:delete_agendamento' agendamento.id %}" onclick="return confirmarExclusao()" title="Excluir"><svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-trash"/></svg></a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="6">
+            <div class="empty">
+              <svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-calendar"/></svg>
+              <p>Nenhum agendamento encontrado.</p>
+            </div>
+          </td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% include 'partials/pagination.html' %}
+  </section>
+{% endblock body %}
