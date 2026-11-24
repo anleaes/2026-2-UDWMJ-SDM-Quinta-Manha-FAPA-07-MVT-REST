@@ -24,7 +24,7 @@ urlpatterns = [
 
     path('salas/', include('salas.urls', namespace='salas')),
 
-    # path('temas/', include('temas.urls', namespace='temas')),
+    path('temas/', include('temas.urls', namespace='temas')),
 
     # path('jogos/', include('jogos.urls', namespace='jogos')),
 
