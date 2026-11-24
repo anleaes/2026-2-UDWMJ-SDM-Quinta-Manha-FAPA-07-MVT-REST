@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{% if form.instance.pk %}Editar agendamento{% else %}Novo agendamento{% endif %} - {{ block.super }}{% endblock title %}
+
+{% block body %}
+  <div class="page-head">
+    <div>
+      <span class="eyebrow">Operação</span>
+      <h1>{% if form.instance.pk %}Editar agendamento{% else %}Novo agendamento{% endif %}</h1>
+      <p>O código da reserva, o código de confirmação e o valor total são gerados automaticamente ao salvar.</p>
+    </div>
+  </div>
+
+  <section class="card card-pad form-card">
+    <form action="" method="POST">
+      {% csrf_token %}
+      {% if form.non_field_errors %}
+        <div class="form-error" role="alert">{{ form.non_field_errors }}</div>
+      {% endif %}
+      <div class="form-grid">
+        <div class="field{% if form.cliente.errors %} has-error{% endif %}">
+          <label for="{{ form.cliente.id_for_label }}">Cliente</label>
+          {{ form.cliente }}
+          {% if form.cliente.help_text %}<span class="help">{{ form.cliente.help_text }}</span>{% endif %}
+          {{ form.cliente.errors }}
+        </div>
+        <div class="field{% if form.horario.errors %} has-error{% endif %}">
+          <label for="{{ form.horario.id_for_label }}">Horário</label>
+          {{ form.horario }}
+          {% if form.horario.help_text %}<span class="help">{{ form.horario.help_text }}</span>{% endif %}
+          {{ form.horario.errors }}
+        </div>
+        <div class="field{% if form.quantidade_pessoas.errors %} has-error{% endif %}">
+          <label for="{{ form.quantidade_pessoas.id_for_label }}">Quantidade de pessoas</label>
+          {{ form.quantidade_pessoas }}
+          {% if form.quantidade_pessoas.help_text %}<span class="help">{{ form.quantidade_pessoas.help_text }}</span>{% endif %}
+          {{ form.quantidade_pessoas.errors }}
+        </div>
+        <div class="field{% if form.desconto.errors %} has-error{% endif %}">
+          <label for="{{ form.desconto.id_for_label }}">Desconto (%)</label>
+          {{ form.desconto }}
+          {% if form.desconto.help_text %}<span class="help">{{ form.desconto.help_text }}</span>{% endif %}
+          {{ form.desconto.errors }}
+        </div>
+        <div class="field{% if form.grupo.errors %} has-error{% endif %}">
+          <label for="{{ form.grupo.id_for_label }}">Grupo (opcional)</label>
+          {{ form.grupo }}
+          {% if form.grupo.help_text %}<span class="help">{{ form.grupo.help_text }}</span>{% endif %}
+          {{ form.grupo.errors }}
+        </div>
+        <div class="field{% if form.status.errors %} has-error{% endif %}">
+          <label for="{{ form.status.id_for_label }}">Situação</label>
+          {{ form.status }}
+          {% if form.status.help_text %}<span class="help">{{ form.status.help_text }}</span>{% endif %}
+          {{ form.status.errors }}
+        </div>
+        <div class="field wide{% if form.observacoes.errors %} has-error{% endif %}">
+          <label for="{{ form.observacoes.id_for_label }}">Observações</label>
+          {{ form.observacoes }}
+          {% if form.observacoes.help_text %}<span class="help">{{ form.observacoes.help_text }}</span>{% endif %}
+          {{ form.observacoes.errors }}
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Salvar</button>
+        <a class="btn" href="{% url 'agendamentos:list_agendamentos' %}">Cancelar</a>
+      </div>
+    </form>
+  </section>
+{% endblock body %}
