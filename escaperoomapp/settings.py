@@ -65,7 +65,7 @@ INSTALLED_APPS = [
 
     'sessoes.apps.SessoesConfig',
 
-    # 'avaliacoes.apps.AvaliacoesConfig',
+    'avaliacoes.apps.AvaliacoesConfig',
 ]
 
 MIDDLEWARE = [
