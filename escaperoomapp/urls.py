@@ -26,7 +26,7 @@ urlpatterns = [
 
     path('temas/', include('temas.urls', namespace='temas')),
 
-    # path('jogos/', include('jogos.urls', namespace='jogos')),
+    path('jogos/', include('jogos.urls', namespace='jogos')),
 
     # path('horarios/', include('horarios.urls', namespace='horarios')),
 
