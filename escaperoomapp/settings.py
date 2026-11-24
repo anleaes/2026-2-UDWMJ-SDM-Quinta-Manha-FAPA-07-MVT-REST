@@ -55,7 +55,7 @@ INSTALLED_APPS = [
 
     'jogos.apps.JogosConfig',
 
-    # 'horarios.apps.HorariosConfig',
+    'horarios.apps.HorariosConfig',
 
     # 'grupos.apps.GruposConfig',
 
