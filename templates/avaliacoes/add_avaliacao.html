@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{% if form.instance.pk %}Editar avaliação{% else %}Nova avaliação{% endif %} - {{ block.super }}{% endblock title %}
+
+{% block body %}
+  <div class="page-head">
+    <div>
+      <span class="eyebrow">Operação</span>
+      <h1>{% if form.instance.pk %}Editar avaliação{% else %}Nova avaliação{% endif %}</h1>
+    </div>
+  </div>
+
+  <section class="card card-pad form-card">
+    <form action="" method="POST">
+      {% csrf_token %}
+      {% if form.non_field_errors %}
+        <div class="form-error" role="alert">{{ form.non_field_errors }}</div>
+      {% endif %}
+      <div class="form-grid">
+        <div class="field{% if form.cliente.errors %} has-error{% endif %}">
+          <label for="{{ form.cliente.id_for_label }}">Cliente</label>
+          {{ form.cliente }}
+          {% if form.cliente.help_text %}<span class="help">{{ form.cliente.help_text }}</span>{% endif %}
+          {{ form.cliente.errors }}
+        </div>
+        <div class="field{% if form.sessao.errors %} has-error{% endif %}">
+          <label for="{{ form.sessao.id_for_label }}">Sessão</label>
+          {{ form.sessao }}
+          {% if form.sessao.help_text %}<span class="help">{{ form.sessao.help_text }}</span>{% endif %}
+          {{ form.sessao.errors }}
+        </div>
+        <div class="field{% if form.nota.errors %} has-error{% endif %}">
+          <label for="{{ form.nota.id_for_label }}">Nota geral</label>
+          {{ form.nota }}
+          {% if form.nota.help_text %}<span class="help">{{ form.nota.help_text }}</span>{% endif %}
+          {{ form.nota.errors }}
+        </div>
+        <div class="field{% if form.nota_atendimento.errors %} has-error{% endif %}">
+          <label for="{{ form.nota_atendimento.id_for_label }}">Nota do atendimento</label>
+          {{ form.nota_atendimento }}
+          {% if form.nota_atendimento.help_text %}<span class="help">{{ form.nota_atendimento.help_text }}</span>{% endif %}
+          {{ form.nota_atendimento.errors }}
+        </div>
+        <div class="field wide{% if form.comentario.errors %} has-error{% endif %}">
+          <label for="{{ form.comentario.id_for_label }}">Comentário</label>
+          {{ form.comentario }}
+          {% if form.comentario.help_text %}<span class="help">{{ form.comentario.help_text }}</span>{% endif %}
+          {{ form.comentario.errors }}
+        </div>
+        <div class="field wide{% if form.resposta_empresa.errors %} has-error{% endif %}">
+          <label for="{{ form.resposta_empresa.id_for_label }}">Resposta da empresa</label>
+          {{ form.resposta_empresa }}
+          {% if form.resposta_empresa.help_text %}<span class="help">{{ form.resposta_empresa.help_text }}</span>{% endif %}
+          {{ form.resposta_empresa.errors }}
+        </div>
+        <div class="field is-check">
+          {{ form.recomendaria }}
+          <label for="{{ form.recomendaria.id_for_label }}">Recomendaria a amigos</label>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Salvar</button>
+        <a class="btn" href="{% url 'avaliacoes:list_avaliacoes' %}">Cancelar</a>
+      </div>
+    </form>
+  </section>
+{% endblock body %}
