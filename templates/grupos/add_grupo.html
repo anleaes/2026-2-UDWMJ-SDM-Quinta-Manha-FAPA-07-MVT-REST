@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{% if form.instance.pk %}Editar grupo{% else %}Novo grupo{% endif %} - {{ block.super }}{% endblock title %}
+
+{% block body %}
+  <div class="page-head">
+    <div>
+      <span class="eyebrow">Pessoas</span>
+      <h1>{% if form.instance.pk %}Editar grupo{% else %}Novo grupo{% endif %}</h1>
+    </div>
+  </div>
+
+  <section class="card card-pad form-card">
+    <form action="" method="POST">
+      {% csrf_token %}
+      {% if form.non_field_errors %}
+        <div class="form-error" role="alert">{{ form.non_field_errors }}</div>
+      {% endif %}
+      <div class="form-grid">
+        <div class="field{% if form.nome.errors %} has-error{% endif %}">
+          <label for="{{ form.nome.id_for_label }}">Nome do grupo</label>
+          {{ form.nome }}
+          {% if form.nome.help_text %}<span class="help">{{ form.nome.help_text }}</span>{% endif %}
+          {{ form.nome.errors }}
+        </div>
+        <div class="field{% if form.tipo_grupo.errors %} has-error{% endif %}">
+          <label for="{{ form.tipo_grupo.id_for_label }}">Tipo de grupo</label>
+          {{ form.tipo_grupo }}
+          {% if form.tipo_grupo.help_text %}<span class="help">{{ form.tipo_grupo.help_text }}</span>{% endif %}
+          {{ form.tipo_grupo.errors }}
+        </div>
+        <div class="field{% if form.cliente.errors %} has-error{% endif %}">
+          <label for="{{ form.cliente.id_for_label }}">Cliente responsável</label>
+          {{ form.cliente }}
+          {% if form.cliente.help_text %}<span class="help">{{ form.cliente.help_text }}</span>{% endif %}
+          {{ form.cliente.errors }}
+        </div>
+        <div class="field{% if form.tamanho_estimado.errors %} has-error{% endif %}">
+          <label for="{{ form.tamanho_estimado.id_for_label }}">Tamanho estimado</label>
+          {{ form.tamanho_estimado }}
+          {% if form.tamanho_estimado.help_text %}<span class="help">{{ form.tamanho_estimado.help_text }}</span>{% endif %}
+          {{ form.tamanho_estimado.errors }}
+        </div>
+        <div class="field wide{% if form.observacoes.errors %} has-error{% endif %}">
+          <label for="{{ form.observacoes.id_for_label }}">Observações</label>
+          {{ form.observacoes }}
+          {% if form.observacoes.help_text %}<span class="help">{{ form.observacoes.help_text }}</span>{% endif %}
+          {{ form.observacoes.errors }}
+        </div>
+        <div class="field wide checklist{% if form.participantes.errors %} has-error{% endif %}">
+          <label for="{{ form.participantes.id_for_label }}">Participantes do grupo</label>
+          {{ form.participantes }}
+          {% if form.participantes.help_text %}<span class="help">{{ form.participantes.help_text }}</span>{% endif %}
+          {{ form.participantes.errors }}
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Salvar</button>
+        <a class="btn" href="{% url 'grupos:list_grupos' %}">Cancelar</a>
+      </div>
+    </form>
+  </section>
+{% endblock body %}
