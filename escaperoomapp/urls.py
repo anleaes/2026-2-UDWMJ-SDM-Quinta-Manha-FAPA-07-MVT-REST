@@ -22,7 +22,7 @@ urlpatterns = [
 
     path('participantes/', include('participantes.urls', namespace='participantes')),
 
-    # path('salas/', include('salas.urls', namespace='salas')),
+    path('salas/', include('salas.urls', namespace='salas')),
 
     # path('temas/', include('temas.urls', namespace='temas')),
 
