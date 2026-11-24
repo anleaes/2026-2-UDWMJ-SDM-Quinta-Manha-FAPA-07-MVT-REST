@@ -38,7 +38,7 @@ urlpatterns = [
 
     path('sessoes/', include('sessoes.urls', namespace='sessoes')),
 
-    # path('avaliacoes/', include('avaliacoes.urls', namespace='avaliacoes')),
+    path('avaliacoes/', include('avaliacoes.urls', namespace='avaliacoes')),
 ]
 
 # Caminho dos arquivos enviados por upload (fotos e documentos)
