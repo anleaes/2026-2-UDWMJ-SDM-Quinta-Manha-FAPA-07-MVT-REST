@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Grupos - {{ block.super }}{% endblock title %}
+
+{% block body %}
+  <div class="page-head">
+    <div>
+      <span class="eyebrow">Pessoas</span>
+      <h1>Grupos</h1>
+      <p>Turmas de amigos, famílias e empresas que jogam juntas.</p>
+    </div>
+    <a class="btn btn-primary" href="{% url 'grupos:add_grupo' %}">
+      <svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-plus"/></svg> Novo grupo
+    </a>
+  </div>
+
+  <form class="toolbar" method="get" action="">
+    <div class="search">
+      <svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-search"/></svg>
+      <input type="search" name="q" value="{{ busca }}" placeholder="Buscar por grupo ou cliente..." aria-label="Buscar">
+    </div>
+    <button class="btn" type="submit">Buscar</button>
+    {% if busca %}
+      <a class="btn btn-ghost" href="{% url 'grupos:list_grupos' %}">Limpar</a>
+    {% endif %}
+  </form>
+
+  <section class="card">
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Grupo</th>
+            <th>Tipo</th>
+            <th>Tamanho</th>
+            <th>Participantes</th>
+            <th>Criado em</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for grupo in grupos %}
+          <tr>
+            <td><div class="cell-title">{{ grupo.nome }}</div><div class="cell-sub">Responsável: {{ grupo.cliente.nome }}</div></td>
+            <td><span class="badge badge-plain">{{ grupo.get_tipo_grupo_display }}</span></td>
+            <td>{{ grupo.tamanho_estimado }} pessoas</td>
+            <td>{{ grupo.participantes.all|length }} cadastrado{{ grupo.participantes.all|length|pluralize }}</td>
+            <td>{{ grupo.data_criacao|date:"d/m/Y" }}</td>
+            <td class="actions">
+              <a class="icon-btn" href="{% url 'grupos:edit_grupo' grupo.id %}" title="Editar"><svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-edit"/></svg></a>
+              <a class="icon-btn danger" href="{% url 'grupos:delete_grupo' grupo.id %}" onclick="return confirmarExclusao()" title="Excluir"><svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-trash"/></svg></a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="6">
+            <div class="empty">
+              <svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-group"/></svg>
+              <p>Nenhum grupo encontrado.</p>
+            </div>
+          </td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% include 'partials/pagination.html' %}
+  </section>
+{% endblock body %}
