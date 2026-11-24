@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{% if form.instance.pk %}Editar horário{% else %}Novo horário{% endif %} - {{ block.super }}{% endblock title %}
+
+{% block body %}
+  <div class="page-head">
+    <div>
+      <span class="eyebrow">Operação</span>
+      <h1>{% if form.instance.pk %}Editar horário{% else %}Novo horário{% endif %}</h1>
+    </div>
+  </div>
+
+  <section class="card card-pad form-card">
+    <form action="" method="POST">
+      {% csrf_token %}
+      {% if form.non_field_errors %}
+        <div class="form-error" role="alert">{{ form.non_field_errors }}</div>
+      {% endif %}
+      <div class="form-grid">
+        <div class="field wide{% if form.jogo.errors %} has-error{% endif %}">
+          <label for="{{ form.jogo.id_for_label }}">Jogo</label>
+          {{ form.jogo }}
+          {% if form.jogo.help_text %}<span class="help">{{ form.jogo.help_text }}</span>{% endif %}
+          {{ form.jogo.errors }}
+        </div>
+        <div class="field{% if form.data.errors %} has-error{% endif %}">
+          <label for="{{ form.data.id_for_label }}">Data</label>
+          {{ form.data }}
+          {% if form.data.help_text %}<span class="help">{{ form.data.help_text }}</span>{% endif %}
+          {{ form.data.errors }}
+        </div>
+        <div class="field{% if form.hora_inicio.errors %} has-error{% endif %}">
+          <label for="{{ form.hora_inicio.id_for_label }}">Início</label>
+          {{ form.hora_inicio }}
+          {% if form.hora_inicio.help_text %}<span class="help">{{ form.hora_inicio.help_text }}</span>{% endif %}
+          {{ form.hora_inicio.errors }}
+        </div>
+        <div class="field{% if form.hora_fim.errors %} has-error{% endif %}">
+          <label for="{{ form.hora_fim.id_for_label }}">Fim</label>
+          {{ form.hora_fim }}
+          {% if form.hora_fim.help_text %}<span class="help">{{ form.hora_fim.help_text }}</span>{% endif %}
+          {{ form.hora_fim.errors }}
+        </div>
+        <div class="field{% if form.vagas_disponiveis.errors %} has-error{% endif %}">
+          <label for="{{ form.vagas_disponiveis.id_for_label }}">Vagas</label>
+          {{ form.vagas_disponiveis }}
+          {% if form.vagas_disponiveis.help_text %}<span class="help">{{ form.vagas_disponiveis.help_text }}</span>{% endif %}
+          {{ form.vagas_disponiveis.errors }}
+        </div>
+        <div class="field{% if form.status.errors %} has-error{% endif %}">
+          <label for="{{ form.status.id_for_label }}">Situação</label>
+          {{ form.status }}
+          {% if form.status.help_text %}<span class="help">{{ form.status.help_text }}</span>{% endif %}
+          {{ form.status.errors }}
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Salvar</button>
+        <a class="btn" href="{% url 'horarios:list_horarios' %}">Cancelar</a>
+      </div>
+    </form>
+  </section>
+{% endblock body %}
