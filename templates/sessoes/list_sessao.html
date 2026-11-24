@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Sessões - {{ block.super }}{% endblock title %}
+
+{% block body %}
+  <div class="page-head">
+    <div>
+      <span class="eyebrow">Operação</span>
+      <h1>Sessões</h1>
+      <p>O jogo acontecendo: início, fim, resultado e pontuação.</p>
+    </div>
+    <a class="btn btn-primary" href="{% url 'sessoes:add_sessao' %}">
+      <svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-plus"/></svg> Nova sessão
+    </a>
+  </div>
+
+  <form class="toolbar" method="get" action="">
+    <div class="search">
+      <svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-search"/></svg>
+      <input type="search" name="q" value="{{ busca }}" placeholder="Buscar por sessão, cliente, jogo ou game master..." aria-label="Buscar">
+    </div>
+    <select name="status" data-autosubmit aria-label="Filtrar por situação">
+      <option value="">Todas as situações</option>
+      {% for valor, nome in status_choices %}
+        <option value="{{ valor }}"{% if valor == status %} selected{% endif %}>{{ nome }}</option>
+      {% endfor %}
+    </select>
+    <button class="btn" type="submit">Buscar</button>
+    {% if busca or status %}
+      <a class="btn btn-ghost" href="{% url 'sessoes:list_sessoes' %}">Limpar</a>
+    {% endif %}
+  </form>
+
+  <section class="card">
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Sessão</th>
+            <th>Cliente</th>
+            <th>Game Master</th>
+            <th>Resultado</th>
+            <th>Pontos</th>
+            <th>Situação</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for sessao in sessoes %}
+          <tr>
+            <td><div class="cell-title"><span class="mono">{{ sessao.codigo }}</span></div><div class="cell-sub">{{ sessao.agendamento.horario.jogo.nome }}</div></td>
+            <td>{{ sessao.agendamento.cliente.nome }}</td>
+            <td>{{ sessao.funcionario.nome }}</td>
+            <td><span class="badge" data-s="{{ sessao.resultado }}">{{ sessao.get_resultado_display }}</span></td>
+            <td>{{ sessao.pontuacao_final }}</td>
+            <td><span class="badge" data-s="{{ sessao.status }}">{{ sessao.get_status_display }}</span></td>
+            <td class="actions">
+              {% if sessao.status == 'agendada' %}<a class="icon-btn ok" href="{% url 'sessoes:start_sessao' sessao.id %}" title="Iniciar sessão"><svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-play"/></svg></a>{% endif %}{% if sessao.status == 'em_andamento' %}<a class="icon-btn ok" href="{% url 'sessoes:finish_sessao' sessao.id %}" title="Finalizar sessão"><svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-flag"/></svg></a>{% endif %}
+              <a class="icon-btn" href="{% url 'sessoes:edit_sessao' sessao.id %}" title="Editar"><svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-edit"/></svg></a>
+              <a class="icon-btn danger" href="{% url 'sessoes:delete_sessao' sessao.id %}" onclick="return confirmarExclusao()" title="Excluir"><svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-trash"/></svg></a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="7">
+            <div class="empty">
+              <svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-play"/></svg>
+              <p>Nenhuma sessão encontrada.</p>
+            </div>
+          </td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% include 'partials/pagination.html' %}
+  </section>
+{% endblock body %}
