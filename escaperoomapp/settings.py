@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
 
     # --- APPS DO PROJETO ---
     # Cada pessoa remove o "#" somente da linha do(s) seu(s) app(s).
