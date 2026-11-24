@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{% if form.instance.pk %}Editar pagamento{% else %}Novo pagamento{% endif %} - {{ block.super }}{% endblock title %}
+
+{% block body %}
+  <div class="page-head">
+    <div>
+      <span class="eyebrow">Operação</span>
+      <h1>{% if form.instance.pk %}Editar pagamento{% else %}Novo pagamento{% endif %}</h1>
+    </div>
+  </div>
+
+  <section class="card card-pad form-card">
+    <form action="" method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      {% if form.non_field_errors %}
+        <div class="form-error" role="alert">{{ form.non_field_errors }}</div>
+      {% endif %}
+      <div class="form-grid">
+        <div class="field wide{% if form.agendamento.errors %} has-error{% endif %}">
+          <label for="{{ form.agendamento.id_for_label }}">Agendamento</label>
+          {{ form.agendamento }}
+          {% if form.agendamento.help_text %}<span class="help">{{ form.agendamento.help_text }}</span>{% endif %}
+          {{ form.agendamento.errors }}
+        </div>
+        <div class="field{% if form.valor.errors %} has-error{% endif %}">
+          <label for="{{ form.valor.id_for_label }}">Valor (R$)</label>
+          {{ form.valor }}
+          {% if form.valor.help_text %}<span class="help">{{ form.valor.help_text }}</span>{% endif %}
+          {{ form.valor.errors }}
+        </div>
+        <div class="field{% if form.metodo.errors %} has-error{% endif %}">
+          <label for="{{ form.metodo.id_for_label }}">Forma de pagamento</label>
+          {{ form.metodo }}
+          {% if form.metodo.help_text %}<span class="help">{{ form.metodo.help_text }}</span>{% endif %}
+          {{ form.metodo.errors }}
+        </div>
+        <div class="field{% if form.status.errors %} has-error{% endif %}">
+          <label for="{{ form.status.id_for_label }}">Situação</label>
+          {{ form.status }}
+          {% if form.status.help_text %}<span class="help">{{ form.status.help_text }}</span>{% endif %}
+          {{ form.status.errors }}
+        </div>
+        <div class="field{% if form.data_vencimento.errors %} has-error{% endif %}">
+          <label for="{{ form.data_vencimento.id_for_label }}">Vencimento</label>
+          {{ form.data_vencimento }}
+          {% if form.data_vencimento.help_text %}<span class="help">{{ form.data_vencimento.help_text }}</span>{% endif %}
+          {{ form.data_vencimento.errors }}
+        </div>
+        <div class="field{% if form.realizado_em.errors %} has-error{% endif %}">
+          <label for="{{ form.realizado_em.id_for_label }}">Pago em</label>
+          {{ form.realizado_em }}
+          {% if form.realizado_em.help_text %}<span class="help">{{ form.realizado_em.help_text }}</span>{% endif %}
+          {{ form.realizado_em.errors }}
+        </div>
+        <div class="field{% if form.codigo_transacao.errors %} has-error{% endif %}">
+          <label for="{{ form.codigo_transacao.id_for_label }}">Código da transação</label>
+          {{ form.codigo_transacao }}
+          {% if form.codigo_transacao.help_text %}<span class="help">{{ form.codigo_transacao.help_text }}</span>{% endif %}
+          {{ form.codigo_transacao.errors }}
+        </div>
+        <div class="field{% if form.comprovante.errors %} has-error{% endif %}">
+          <label for="{{ form.comprovante.id_for_label }}">Comprovante</label>
+          {{ form.comprovante }}
+          {% if form.comprovante.help_text %}<span class="help">{{ form.comprovante.help_text }}</span>{% endif %}
+          {{ form.comprovante.errors }}
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Salvar</button>
+        <a class="btn" href="{% url 'pagamentos:list_pagamentos' %}">Cancelar</a>
+      </div>
+    </form>
+  </section>
+{% endblock body %}

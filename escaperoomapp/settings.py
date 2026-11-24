@@ -61,7 +61,7 @@ INSTALLED_APPS = [
 
     'agendamentos.apps.AgendamentosConfig',
 
-    # 'pagamentos.apps.PagamentosConfig',
+    'pagamentos.apps.PagamentosConfig',
 
     # 'sessoes.apps.SessoesConfig',
 

@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Pagamentos - {{ block.super }}{% endblock title %}
+
+{% block body %}
+  <div class="page-head">
+    <div>
+      <span class="eyebrow">Operação</span>
+      <h1>Pagamentos</h1>
+      <p>Quando a reserva é totalmente paga, ela vira "Confirmada" sozinha.</p>
+    </div>
+    <a class="btn btn-primary" href="{% url 'pagamentos:add_pagamento' %}">
+      <svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-plus"/></svg> Novo pagamento
+    </a>
+  </div>
+
+  <form class="toolbar" method="get" action="">
+    <div class="search">
+      <svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-search"/></svg>
+      <input type="search" name="q" value="{{ busca }}" placeholder="Buscar por transação, reserva ou cliente..." aria-label="Buscar">
+    </div>
+    <select name="status" data-autosubmit aria-label="Filtrar por situação">
+      <option value="">Todas as situações</option>
+      {% for valor, nome in status_choices %}
+        <option value="{{ valor }}"{% if valor == status %} selected{% endif %}>{{ nome }}</option>
+      {% endfor %}
+    </select>
+    <button class="btn" type="submit">Buscar</button>
+    {% if busca or status %}
+      <a class="btn btn-ghost" href="{% url 'pagamentos:list_pagamentos' %}">Limpar</a>
+    {% endif %}
+  </form>
+
+  <section class="card">
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Transação</th>
+            <th>Reserva</th>
+            <th>Valor</th>
+            <th>Vencimento</th>
+            <th>Pago em</th>
+            <th>Situação</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for pagamento in pagamentos %}
+          <tr>
+            <td><div class="cell-title"><span class="mono">{{ pagamento.codigo_transacao }}</span></div><div class="cell-sub">{{ pagamento.get_metodo_display }}</div></td>
+            <td><div class="cell-title"><span class="mono">{{ pagamento.agendamento.codigo }}</span></div><div class="cell-sub">{{ pagamento.agendamento.cliente.nome }}</div></td>
+            <td><span class="money">R$ {{ pagamento.valor }}</span></td>
+            <td>{{ pagamento.data_vencimento|date:"d/m/Y" }}</td>
+            <td>{{ pagamento.realizado_em|date:"d/m/Y H:i"|default:"—" }}</td>
+            <td><span class="badge" data-s="{{ pagamento.status }}">{{ pagamento.get_status_display }}</span></td>
+            <td class="actions">
+              <a class="icon-btn" href="{% url 'pagamentos:edit_pagamento' pagamento.id %}" title="Editar"><svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-edit"/></svg></a>
+              <a class="icon-btn danger" href="{% url 'pagamentos:delete_pagamento' pagamento.id %}" onclick="return confirmarExclusao()" title="Excluir"><svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-trash"/></svg></a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="7">
+            <div class="empty">
+              <svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-card"/></svg>
+              <p>Nenhum pagamento encontrado.</p>
+            </div>
+          </td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% include 'partials/pagination.html' %}
+  </section>
+{% endblock body %}
