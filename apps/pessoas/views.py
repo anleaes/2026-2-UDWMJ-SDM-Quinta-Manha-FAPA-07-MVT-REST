@@ -3,8 +3,10 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import ProtectedError, Q
 from django.shortcuts import render, redirect, get_object_or_404
+from rest_framework import viewsets
 
 from .models import Pessoa
+from .serializer import PessoaSerializer
 
 
 @login_required(login_url='/contas/login/')
@@ -28,3 +30,10 @@ def list_pessoas(request):
         'querystring': querystring,
     }
     return render(request, template_name, context)
+
+
+# --------------------------- REST -----------------------------
+
+class PessoaViewSet(viewsets.ModelViewSet):
+    queryset = Pessoa.objects.all()
+    serializer_class = PessoaSerializer
