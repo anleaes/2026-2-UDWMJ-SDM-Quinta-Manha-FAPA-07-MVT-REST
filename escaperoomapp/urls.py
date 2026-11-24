@@ -30,7 +30,7 @@ urlpatterns = [
 
     path('horarios/', include('horarios.urls', namespace='horarios')),
 
-    # path('grupos/', include('grupos.urls', namespace='grupos')),
+    path('grupos/', include('grupos.urls', namespace='grupos')),
 
     # path('agendamentos/', include('agendamentos.urls', namespace='agendamentos')),
 
