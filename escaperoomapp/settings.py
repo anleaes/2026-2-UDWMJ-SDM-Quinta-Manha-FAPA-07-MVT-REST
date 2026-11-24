@@ -51,7 +51,7 @@ INSTALLED_APPS = [
 
     'salas.apps.SalasConfig',
 
-    # 'temas.apps.TemasConfig',
+    'temas.apps.TemasConfig',
 
     # 'jogos.apps.JogosConfig',
 
