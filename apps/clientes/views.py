@@ -3,9 +3,11 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import ProtectedError, Q
 from django.shortcuts import render, redirect, get_object_or_404
+from rest_framework import viewsets
 
 from .forms import ClienteForm
 from .models import Cliente
+from .serializer import ClienteSerializer
 
 
 @login_required(login_url='/contas/login/')
@@ -75,3 +77,10 @@ def delete_cliente(request, id_cliente):
     except ProtectedError:
         messages.error(request, 'Não é possível excluir: o cliente está sendo usado por outros registros.')
     return redirect('clientes:list_clientes')
+
+
+# --------------------------- REST -----------------------------
+
+class ClienteViewSet(viewsets.ModelViewSet):
+    queryset = Cliente.objects.all()
+    serializer_class = ClienteSerializer
