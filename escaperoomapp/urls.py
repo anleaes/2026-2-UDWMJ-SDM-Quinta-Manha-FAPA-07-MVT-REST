@@ -28,7 +28,7 @@ urlpatterns = [
 
     path('jogos/', include('jogos.urls', namespace='jogos')),
 
-    # path('horarios/', include('horarios.urls', namespace='horarios')),
+    path('horarios/', include('horarios.urls', namespace='horarios')),
 
     # path('grupos/', include('grupos.urls', namespace='grupos')),
 
