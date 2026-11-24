@@ -3,3 +3,4 @@ python-decouple
 pillow
 django-widget-tweaks
 oracledb==3.3.0
+djangorestframework==3.16.0
