@@ -63,7 +63,7 @@ INSTALLED_APPS = [
 
     'pagamentos.apps.PagamentosConfig',
 
-    # 'sessoes.apps.SessoesConfig',
+    'sessoes.apps.SessoesConfig',
 
     # 'avaliacoes.apps.AvaliacoesConfig',
 ]
