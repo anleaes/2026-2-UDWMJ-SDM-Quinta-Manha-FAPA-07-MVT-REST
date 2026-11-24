@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Salas - {{ block.super }}{% endblock title %}
+
+{% block body %}
+  <div class="page-head">
+    <div>
+      <span class="eyebrow">Catálogo</span>
+      <h1>Salas</h1>
+      <p>Os ambientes onde as histórias acontecem.</p>
+    </div>
+    <a class="btn btn-primary" href="{% url 'salas:add_sala' %}">
+      <svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-plus"/></svg> Nova sala
+    </a>
+  </div>
+
+  <form class="toolbar" method="get" action="">
+    <div class="search">
+      <svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-search"/></svg>
+      <input type="search" name="q" value="{{ busca }}" placeholder="Buscar sala..." aria-label="Buscar">
+    </div>
+    <button class="btn" type="submit">Buscar</button>
+    {% if busca %}
+      <a class="btn btn-ghost" href="{% url 'salas:list_salas' %}">Limpar</a>
+    {% endif %}
+  </form>
+
+  {% if salas %}
+  <section class="cards">
+    {% for sala in salas %}
+    <article class="card room">
+      <div class="room-img">
+        {% if sala.imagem %}
+          <img src="{{ sala.imagem.url }}" alt="Foto da sala {{ sala.nome }}" loading="lazy">
+        {% else %}
+          <svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-door"/></svg>
+        {% endif %}
+        {% if sala.ativa %}<span class="badge" data-s="ativo">Ativa</span>{% else %}<span class="badge" data-s="inativo">Inativa</span>{% endif %}
+      </div>
+      <div class="room-body">
+        <h3>{{ sala.nome }}</h3>
+        <p>{{ sala.descricao }}</p>
+        <div class="chips">
+          <span class="chip"><svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-users"/></svg> {{ sala.capacidade_minima }} a {{ sala.capacidade_maxima }} pessoas</span>
+          <span class="chip"><svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-clock"/></svg> {{ sala.duracao_minutos }} min</span>
+        </div>
+        <div class="room-foot">
+          <span class="money">R$ {{ sala.valor_base }} <span class="muted" style="font-weight:400">/ pessoa</span></span>
+          <span>
+            <a class="icon-btn" href="{% url 'salas:edit_sala' sala.id %}" title="Editar"><svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-edit"/></svg></a>
+            <a class="icon-btn danger" href="{% url 'salas:delete_sala' sala.id %}" onclick="return confirmarExclusao()" title="Excluir"><svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-trash"/></svg></a>
+          </span>
+        </div>
+      </div>
+    </article>
+    {% endfor %}
+  </section>
+  <section class="card" style="margin-top:20px">{% include 'partials/pagination.html' %}</section>
+  {% else %}
+  <section class="card"><div class="empty">
+    <svg class="icon" aria-hidden="true"><use href="{% static 'img/icons.svg' %}#i-door"/></svg>
+    <p>Nenhuma sala encontrada.</p>
+  </div></section>
+  {% endif %}
+{% endblock body %}

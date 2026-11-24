@@ -49,7 +49,7 @@ INSTALLED_APPS = [
 
     'participantes.apps.ParticipantesConfig',
 
-    # 'salas.apps.SalasConfig',
+    'salas.apps.SalasConfig',
 
     # 'temas.apps.TemasConfig',
 
