@@ -20,7 +20,7 @@ urlpatterns = [
 
     path('funcionarios/', include('funcionarios.urls', namespace='funcionarios')),
 
-    # path('participantes/', include('participantes.urls', namespace='participantes')),
+    path('participantes/', include('participantes.urls', namespace='participantes')),
 
     # path('salas/', include('salas.urls', namespace='salas')),
 

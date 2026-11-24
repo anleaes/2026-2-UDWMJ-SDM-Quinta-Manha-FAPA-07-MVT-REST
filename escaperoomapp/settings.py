@@ -47,7 +47,7 @@ INSTALLED_APPS = [
 
     'funcionarios.apps.FuncionariosConfig',
 
-    # 'participantes.apps.ParticipantesConfig',
+    'participantes.apps.ParticipantesConfig',
 
     # 'salas.apps.SalasConfig',
 
